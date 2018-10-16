@@ -1,12 +1,13 @@
 var user = {name: "Alex", age: 26, isUser: true};
-var copy = {};
-function objCopy(obj) { 
+
+function objCopy(obj) {
+    var copy = {};
     for (var key in obj) {
         copy[key] = obj[key];
     }
     return copy;
 }
 
-objCopy(user);
-copy.name = "Max";
-console.log(copy);
+var clone = objCopy(user);
+clone.name = "Max";
+console.log(clone);
