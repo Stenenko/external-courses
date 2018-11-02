@@ -1,0 +1,13 @@
+.main {
+    float: left;
+    margin: 15px;
+    padding: 15px;   
+}
+#item7 {
+    width: 400px;
+    background: url(https://image.freepik.com/free-vector/bokeh-lights-and-glitter-background_1048-8548.jpg) no-repeat #fc0;
+    font-weight: 600;
+    font-size: 1.3em;
+    color:#3b0226;
+    font-family: "Roboto Slab";
+}
