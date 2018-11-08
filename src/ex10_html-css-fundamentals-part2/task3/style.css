@@ -25,6 +25,12 @@
     .article {
         width: 50%;
     }
+    .col1 {
+        width: 28%;
+    }
+    .col2 {
+        width: 72%;
+    }
 }
 
 /* для планшетов и смартфонов */
@@ -44,14 +50,14 @@
     }
     .header {
         width: 100%;
-        margin: 0 auto;
+        margin: 8px auto;
     }
     .logo {
         display: none;
     }
     .search {
         border:none;
-        margin: -34px 0;
+        margin: -44px 0;
         float: right;
     }
     .wrapper {
@@ -61,7 +67,7 @@
     .logo-tab {
         width: 100px;
         position: absolute;
-        top: 0;
+        top: 10px;
         left: calc(50% - 50px);
     }
     .logo-tab img {
@@ -72,6 +78,12 @@
     }
     .article {
         width: 100%;
+    }
+    .col1 {
+        width: 20%;
+    }
+    .col2 {
+        width: 80%;
     }
 }
 
@@ -114,25 +126,24 @@ html {
 
 .icons__item--locale {
     position: absolute;
-    background: #ffffff;
-    border: 2px solid #d4d4d5;
-    padding: 9px 17px;
-    width: 120px;
-    text-align: center;
     top: -50px;
     left: -58px;
+    width: 120px;
+    padding: 9px 17px;
+    background: #ffffff;
+    border: 2px solid #d4d4d5;
+    text-align: center;
     border-radius: 5px;
 }
 
 .icons__item--locale::after, .icons__item--locale::before {
-	top: 100%;
+    position: absolute;
+    top: 100%;
 	left: 50%;
-	border: solid transparent;
 	content: " ";
 	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
+    width: 0;
+    border: solid transparent;
 }
 
 .icons__item--locale::after {
@@ -328,14 +339,12 @@ input[type="search"] {
 
 .col1 {
     box-sizing: border-box;
-    width: 28%;
     float: left;
     height: 100%;
 }
 
 .col2 {
     box-sizing: border-box;
-    width: 72%;
     float: left;
     padding-top: 20px;
 }
