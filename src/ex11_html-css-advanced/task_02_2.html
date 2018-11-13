@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Task 2.2</title>
+</head>
+<body>
+    <style>
+        @keyframes bounce {
+            from {
+                left: 0;
+                bottom: 50px;
+            }
+            25% {
+                left: 175px;
+                bottom: 90px;
+            }
+            50% {
+                left: 350px;
+                bottom: 50px;
+            }
+            75% {
+                left: 175px;
+                bottom: 90px;
+            }
+            to {
+                left: 0;
+                bottom: 50px;
+            }
+        }
+        .wrapper {
+            position: relative;
+            width: 400px;
+            height: 200px;
+            margin: 100px auto;
+            background-color: beige;
+        }
+        .block1 {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background-color: #01092c;
+        }
+        .block2 {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background-color: #01092c;
+        }
+        .ball {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(#b63838, #630f0f);
+            animation: bounce 2.5s linear infinite;
+        }
+    </style>
+    <div class="wrapper">
+        <div class="block1"></div>
+        <div class="block2"></div>
+        <div class="ball"></div>
+    </div>
+</body>
+</html>

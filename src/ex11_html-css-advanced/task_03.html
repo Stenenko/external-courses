@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <title>Task 3</title>
+    </head>
+    <body>
+        <style>
+        .wrapper {
+            margin: 50px auto;
+            padding: 30px;
+            border: 2px solid #dee9f3;
+            border-radius: 7px;
+            width: 400px;
+        }
+        .field { 
+            position:relative;
+        }
+        .field:nth-child(1){
+            border-bottom: 1px solid #bebebe;
+        }
+        .field:nth-child(4){
+            border-top: 1px solid #bebebe;
+        }
+        .field:nth-child(2) {
+            border-right: 1px solid #bebebe;
+            width: 120px;
+        }
+        .field:nth-child(3) {
+            width: 275px;
+        }
+        .field:nth-child(2), .field:nth-child(3) {
+            display: inline-block;
+        }
+        label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.7em;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: all .2s linear;
+            color:#bebebe;
+        }
+        input {
+            box-sizing: border-box;
+            margin-top: 20px;
+            border: none;
+            padding: 3px 2px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1em;
+            width: 100%;
+        }
+        input:invalid + label {
+            top: 6px;
+            opacity: 0;
+        }
+        input:valid + label {
+            top: 3px;
+            opacity: 1;
+        }
+        input:focus {
+            outline: none;
+        }
+        input:focus + label {
+            color:#4399fb;
+        }
+        </style>
+
+        <div class="wrapper">
+            <form action="" method="POST">
+                <div class="field">
+                    <input type="text" name="title" required placeholder="Title">
+                    <label>Title</label>
+                </div>
+                <div class="field">
+                    <input type="text" name="price" required placeholder="Price">
+                    <label>Price</label>
+                </div>
+                <div class="field">
+                    <input type="text" name="location" required placeholder="Specific Location (optional)">
+                    <label>Specific Location (optional)</label>
+                </div>
+                <div class="field">
+                    <input type="text" name="description" required placeholder="Description">
+                    <label>Description</label>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

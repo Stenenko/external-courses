@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Task 2.3</title>
+</head>
+<body>
+    <style>
+        @keyframes trans {
+            from {
+                background: radial-gradient(#b63838, #630f0f);
+            }
+            17% {
+                border-radius: 0;
+            }
+            34% {
+                background: radial-gradient(#a32222,#250303);
+            }
+            51% {
+                width: 130px;
+                height: 130px;
+                transform: skew(-45deg, 45deg);
+            }
+            68% {
+                transform: rotate(360deg);
+            }
+            86% {
+                background: radial-gradient(#b63838, #630f0f);
+            }
+            to {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+            }
+        }
+        .ball {
+            margin: 100px auto;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(#b63838, #630f0f);
+            animation: trans 4s linear infinite;
+        }
+    </style>
+    <div class="ball"></div>
+</body>
+</html>

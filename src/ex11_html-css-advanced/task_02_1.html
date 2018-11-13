@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Task 2.1</title>
+</head>
+<body>
+    <style>
+        @keyframes moving {
+            from {margin-left: 0;}
+            50% {margin-left: 20px;}
+            to {margin-left: 0; transform: rotate(360deg);}
+        }
+        .loader {
+            width: 120px;
+            margin: 200px auto;
+        }
+        .item {
+            width: 15px;
+            height: 15px;
+            display: inline-block;
+            background-color: darkgrey;
+            animation-name: moving;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+        /* подключить пьяный лоадер для людей в подпитии */
+        /*
+        .item:nth-child(2) {
+            animation-delay: .5s;
+        }
+        .item:nth-child(3) {
+            animation-delay: 1s;
+        }
+        */
+    </style>
+    <div class="loader">
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+    </div>
+</body>
+</html>
