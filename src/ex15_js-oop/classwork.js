@@ -1,11 +1,12 @@
 function Shape(type){
     this._type = type;
+    this._sides = [];
 }
 Shape.prototype.getType = function() {
-    return console.log("Shape type: " + this._type);
+    return this._type;
 }
 Shape.prototype.getPerimeter = function() {
-    return console.log("Perimeter is redefined below");
+    return this._sides.reduce((acc, val) => acc + val, 0);
 }
 Shape.prototype.draw = function() {
     console.log(this._type + " is drawn");
@@ -13,53 +14,40 @@ Shape.prototype.draw = function() {
 
 function Triangle(a,b,c) {
     Shape.call(this, "Triangle");
-    this._a = a;
-    this._b = b;
-    this._c = c;
+    this._sides = [a,b,c];
 }
 Triangle.prototype = Object.create(Shape.prototype);
 Triangle.prototype.constructor = Triangle;
-Triangle.prototype.getPerimeter = function() {
-    console.log("Perimeter of this triangle is " + (this._a + this._b + this._c));
-}
 
 function Tetragon(a,b,c,d) {
     Shape.call(this, "Tetragon");
-    this._a = a;
-    this._b = b;
-    this._c = c;
-    this._d = d;
+    this._sides = [a,b,c,d];
 }
 Tetragon.prototype =  Object.create(Shape.prototype);
 Tetragon.prototype.constructor = Tetragon;
-Tetragon.prototype.getPerimeter = function() {
-    console.log("Perimeter of this tetragon is " + (this._a + this._b + this._c + this._d));
-}
 
 function Square(a) {
     Shape.call(this, "Square");
     this._a = a;
+    this._sides = [a,a,a,a];
 }
 Square.prototype =  Object.create(Tetragon.prototype);
 Square.prototype.constructor = Square;
-Square.prototype.getPerimeter = function() {
-    console.log("Perimeter of this square is " + (this._a*4));
-}
 Square.prototype.getArea = function() {
-    console.log("Area of this square is " + (this._a*2));
+    return (this._a*2);
 }
 
-var triangle = new Triangle(2,10,6);
-var tetragon = new Tetragon(4,2,5,9);
-var square = new Square(3);
+var triangle = new Triangle(4,10,6);
+var tetragon = new Tetragon(4,6,2,7);
+var square = new Square(5);
 
-triangle.getType();
-triangle.getPerimeter();
+console.log(triangle.getType());
+console.log(triangle.getPerimeter());
 triangle.draw();
-tetragon.getType();
-tetragon.getPerimeter();
+console.log(tetragon.getType());
+console.log(tetragon.getPerimeter());
 tetragon.draw();
-square.getType();
-square.getPerimeter();
-square.getArea();
+console.log(square.getType());
+console.log(square.getPerimeter());
+console.log(square.getArea());
 square.draw();
