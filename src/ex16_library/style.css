@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+.wrapper {
+    width: 1310px;
+    margin: 0 auto;
+}
+.user-menu {
+    height: 45px;
+    background-color: #2f364a;
+}
+.main-wrapper {
+    display: flex;
+    height: 100vh;
+}
+.sidebar {
+    width: 200px;
+    background-color: #19202e;
+}
+.add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 110px;
+    background-color: #1f2637;
+    border-bottom: 1px solid #141824;
+}
+.add__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    width: 160px;
+    height: 43px;
+    background-color: #f2795a;
+    font-size: 0.85em;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 3px;
+}
+.add__button--plus {
+    font-size: 2em;
+    padding-right: 16px;
+}
+.sidebar-block {
+    background-color: #1f2637;
+    border-bottom: 1px solid #141824;
+    border-top: 1px solid #282f41;
+    margin-top: 4px;
+    padding: 0 20px 10px 0;
+}
+.sidebar-menu {
+    list-style-type: none;
+}
+.sidebar-menu__item {
+    padding: 10px 0 10px 23px;
+}
+.sidebar-menu__link {
+    text-decoration: none;
+    color: #78829d;
+    font-size: 0.7em;
+    font-weight: bold;
+}
+.sidebar-menu__item:hover {
+    background-color: #15a4fa;
+}
+.sidebar-menu__item:hover .sidebar-menu__link {
+    color: #fff;
+}
+.sidebar-menu__image {
+    position: relative;
+    top: 3px;
+    padding-right: 5px;
+}
+.sidebar-menu__item:hover .sidebar-menu__image {
+    filter: brightness(200%);
+}
+.sidebar-best {
+    list-style-type: none;
+    padding-top: 6px;
+}
+.sidebar-best__item {
+    padding: 10px 0 10px 23px;
+}
+.sidebar-best__item::before {
+    content: "•";
+    font-size: 2.5em;
+    line-height: 0.1em;
+    position: relative;
+    top: 6px;
+    padding-right: 5px;
+}
+.sidebar-best__link {
+    text-decoration: none;
+    color: #78829d;
+    font-size: 0.7em;
+    font-weight: bold;
+}
+.sidebar-best__item:hover {
+    background-color: #15a4fa;
+}
+.sidebar-best__item:hover .sidebar-best__link {
+    color: #fff;
+}
+.sidebar-best__item:first-child {
+    color: #e64c66;
+}
+.sidebar-best__item:nth-child(2) {
+    color: #ffab00;
+}
+.sidebar-best__item:nth-child(3) {
+    color: #00bfdd;
+}
+.sidebar-best__item:last-child {
+    color: #7874cf;
+}
+.sidebar-actions {
+    list-style-type: none;
+    padding-top: 22px;
+    padding-bottom: 100px;
+}
+.sidebar-actions__item {
+    font-size: 0.7em;
+    font-weight: bold;
+    color: #4f5a6f;
+    line-height: 1.6em;
+    padding: 10px 0 20px 47px;
+}
+.sidebar-actions__item::before {
+    content: url(img/clock.png);
+    position: relative;
+    top: 6px;
+    margin-left: -26px;
+    padding-right: 12px;
+}
+.sidebar-actions__time {
+    padding-top: 10px;
+}
+.sidebar-actions__item--bright {
+    color: #78829d;
+}
