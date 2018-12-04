@@ -4,19 +4,110 @@
     font-family: 'Montserrat', sans-serif;
 }
 .wrapper {
-    width: 1310px;
+    max-width: 1310px;
     margin: 0 auto;
 }
-.user-menu {
+.menu-bar {
     height: 45px;
     background-color: #2f364a;
 }
+.menu {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.84em;
+    color: #78829d;
+    list-style-type: none;
+    height: 100%;
+}
+.menu__item {
+    padding: 14px 14px;
+}
+.menu__item--active {
+    display: flex;
+    align-items: center;
+    background-color: #15a4fa;
+    color: #fff;
+    padding: 2px 14px;
+}
+.menu__item--active img {
+    padding: 0 7px;
+}
 .main-wrapper {
     display: flex;
-    height: 100vh;
 }
-.sidebar {
+.main {
+    flex-basis: 1110px;
+}
+.browse-bar {
+    background-color: #eef1f7;
+}
+.browse-bar__heading {
+    color: #5b6277;
+    padding: 23px;
+    border-bottom: 1px solid #dadfea;
+}
+.filter-bar {
+    border-top: 1px solid #f4f6fa;
+    display: flex;
+    justify-content: space-between;
+}
+.filter {
+    list-style-type: none;
+    margin: 15px;
+}
+.filter__item {
+    font-size: 0.7em;
+    display: inline-block;
+    color: #8c97b2;
+    border-radius: 10px;
+    padding: 3px 10px;
+    cursor: pointer;
+}
+.filter__item:active, .filter__item:hover {
+    color: #fff;
+    background-color: #97b3ce;
+}
+.filter-search {
+    width: 400px;
+    height: 30px;
+    margin: 10px;
+    border-radius: 15px;
+    outline: none;
+    border: 1px solid #c7cddb;
+    padding-left: 15px;
+    background-image: url(img/search.png);
+    background-repeat: no-repeat;
+    background-position: 370px;
+}
+.library {
+    background-color: #fff;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.book {
     width: 200px;
+    margin: 15px 0;
+}
+.book__name, .book__author {
+    padding: 5px 0 3px 0;
+    color: #444c63;
+}
+.book__name {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+.book__author {
+    font-size: 0.7em;
+}
+
+
+
+
+
+.sidebar {
+    flex-basis: 200px;
     background-color: #19202e;
 }
 .add {
@@ -34,6 +125,7 @@
     text-decoration: none;
     width: 160px;
     height: 43px;
+    margin: 10px;
     background-color: #f2795a;
     font-size: 0.85em;
     font-weight: bold;
@@ -119,7 +211,7 @@
 .sidebar-actions {
     list-style-type: none;
     padding-top: 22px;
-    padding-bottom: 100px;
+    padding-bottom: 30px;
 }
 .sidebar-actions__item {
     font-size: 0.7em;
@@ -140,4 +232,10 @@
 }
 .sidebar-actions__item--bright {
     color: #78829d;
+}
+
+.footer {
+    max-width: 1310px;
+    height: 45px;
+    background-color: #181e2c;
 }
