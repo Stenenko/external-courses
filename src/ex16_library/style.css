@@ -63,7 +63,7 @@
     padding: 3px 10px;
     cursor: pointer;
 }
-.filter__item:active, .filter__item:hover {
+.filter__item:hover, .filter__item--active {
     color: #fff;
     background-color: #97b3ce;
 }
