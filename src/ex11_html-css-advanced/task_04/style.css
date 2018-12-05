@@ -236,39 +236,18 @@
 .book__author {
     font-size: 0.7em;
 }
-.rating {
-    padding-top: 5px;
-    float: left;
-    border: none;
-}
-.rating label {
-    float:right;
-    width:16px;
+.book__rate {
+    position: relative;
+    width: 80px;
     height: 16px;
-    overflow: hidden;
-    white-space:nowrap;
-    cursor:pointer;
-    text-indent: -9999px;
+    background: url(img/star_gray.png) repeat-x;
 }
-.rating:not(:checked) > input {
+.book__rate--bar {
     position: absolute;
-    top:-9999px;
-    clip:rect(0,0,0,0);
-}
-.rating:not(:checked) > label {
-    background: url(img/star.png) no-repeat 0 -16px;
-}
-.rating > input:checked ~ label {
-    width: 16px;
-    height: 16px;
-    background: url(img/star.png) no-repeat 0 0px;
-}
-.rating:not(:checked) > label:hover,
-.rating > input:checked + label:hover,
-.rating > input:checked + label:hover ~ label,
-.rating > label:hover ~ input:checked ~ label,
-.rating:not(:checked) > label:hover ~ label {
-    background: url(img/star.png) no-repeat 0 0;
+    top: 0px;
+    left: 0px; 
+    height: 16px; 
+    background:url(img/star_gold.png) repeat-x;
 }
 .footer {
     display: flex;
