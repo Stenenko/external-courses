@@ -1,7 +1,7 @@
 var id = 1;
 
 //library constructor
-function Book (img, title, author, year, rating, price) {
+function Book(img, title, author, year, rating, price){
 	this.img = img;
 	this.title = title;
     this.author = author;
@@ -14,7 +14,7 @@ function Book (img, title, author, year, rating, price) {
     var library = document.getElementsByClassName('library')[0];
     var book = document.createElement('div');
     book.className = 'book';
-    book.id = 'book' + this.id;
+    book.id = this.id;
     library.appendChild(book);
 
     var image = document.createElement('img');
@@ -39,20 +39,17 @@ function Book (img, title, author, year, rating, price) {
 
     for (var i = 0; i < 5; i++) {
 		var star = document.createElement('div');
-		star.className = 'book__star';
-		/*star.classList.add('b' + books.length);*/
-		rate.appendChild(star);
-		/*star.addEventListener('click', 
-			function (event) {
-				var target = event.target;
-				Book.prototype.rateRefresh(that, target, starsWrapper);
-			}
-		);*/
-		if (i + 1 <= rating) {
-			star.classList.add('book__star--active');
+        star.className = 'book__star';
+        star.classList.add('s' + book.id);
+        rate.appendChild(star);
+        //current rating
+		if (i + 1 <= rating){
+			star.classList.add('book__star--active', 'book__star--current');
 		}
-    }
-    var rateStar = document.querySelectorAll('.book__star');
+    };
+
+//user rating
+    var rateStar = document.querySelectorAll('.book__star.s' + book.id);
     
     rate.addEventListener('click', function(e){
         var target = e.target;
@@ -61,6 +58,7 @@ function Book (img, title, author, year, rating, price) {
             target.classList.add('book__star--active', 'book__star--current');
         }
     });
+
     rate.addEventListener('mouseover', function(e){
         var target = e.target;
         if(target.classList.contains('book__star')){
@@ -69,24 +67,28 @@ function Book (img, title, author, year, rating, price) {
             mouseOverActive(rateStar);
         }
     });
+
     rate.addEventListener('mouseout', function(){
         addClass(rateStar, 'book__star--active');
         mouseOutActive(rateStar);
     });
-    function removeClass(arr) {
+
+    function removeClass(arr){
         for(var i = 0; i < arr.length; i++) {
             for(var j = 1; j < arguments.length; j++){
                 rateStar[i].classList.remove(arguments[j]);
             }
         }
-    }
+    };
+
     function addClass(arr) {
         for(var i = 0; i < arr.length; i++) {
             for(var j = 1; j < arguments.length; j++){
                 rateStar[i].classList.add(arguments[j]);
             }
         }
-    }
+    };
+
     function mouseOverActive(arr){
         for(var i = 0; i < arr.length; i++){
             if(arr[i].classList.contains('book__star--active')){
@@ -95,20 +97,20 @@ function Book (img, title, author, year, rating, price) {
                 arr[i].classList.add('book__star--active');
             }
         }
-    }
+    };
+
     function mouseOutActive(arr){
         for(var i = arr.length-1; i >= 0; i--){
             if(arr[i].classList.contains('book__star--current')){
                 break;
-            }else{
+            } else {
                 arr[i].classList.remove('book__star--active');
             }
         }
     }
-
 };
 
-//adding books
+//adding books to the library
 var allBooks = [new Book('book01.png', 'Jewels of Nizam', 'Geeta Devi', 2017, 3, 150),
                 new Book('book02.png', 'Cakes & Bakes', 'Sanjeev Kapoor', 2001, 4, 99),
                 new Book('book03.png', 'Jamies Kitchen', 'Jamie Oliver', 2010, 2, 70),
@@ -132,7 +134,11 @@ function bookAdd() {
 	var formWrapper = document.createElement('div');
     formWrapper.className = 'form-wrapper';
     document.body.appendChild(formWrapper);
-	
+
+    var closeBtn = document.createElement('div');
+    closeBtn.className = 'form-close';
+    formWrapper.appendChild(closeBtn);
+    
 	var form = document.createElement('form');
 	form.id = 'book-add';
     form.setAttribute('action', '#');
@@ -170,7 +176,9 @@ function bookAdd() {
 	form.appendChild(bookYear);	
 
 	var yearInput = document.createElement('input');
-	yearInput.setAttribute('type', 'number');
+    yearInput.setAttribute('type', 'number');
+    yearInput.setAttribute('min', '0');
+    yearInput.setAttribute('max', '2018');
 	yearInput.setAttribute('required', '');
     form.appendChild(yearInput);
 
@@ -180,7 +188,7 @@ function bookAdd() {
 
 	var rateInput = document.createElement('input');
 	rateInput.setAttribute('type', 'number');
-    rateInput.setAttribute('min', '1');
+    rateInput.setAttribute('min', '0');
     rateInput.setAttribute('max', '5');
     rateInput.setAttribute('required', '');
     form.appendChild(rateInput);
@@ -197,9 +205,14 @@ function bookAdd() {
 	var submit = document.createElement('input');
 	submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'Add Book');
-    form.appendChild(submit);
+    form.appendChild(submit);	
 
 	formBg.addEventListener('click', function (){
+		document.body.removeChild(formBg);
+		document.body.removeChild(formWrapper);
+    });
+
+    closeBtn.addEventListener('click', function (){
 		document.body.removeChild(formBg);
 		document.body.removeChild(formWrapper);
 	});
