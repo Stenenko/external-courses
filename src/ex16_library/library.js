@@ -1,7 +1,7 @@
 var id = 1;
 
 //library constructor
-function Book(img, title, author, year, rating, price){
+function Book(img, title, author, year, rating, price) {
 	this.img = img;
 	this.title = title;
     this.author = author;
@@ -12,15 +12,16 @@ function Book(img, title, author, year, rating, price){
 	id++;
     
     var library = document.getElementsByClassName('library')[0];
+
     var book = document.createElement('div');
     book.className = 'book';
-    book.id = this.id;
+    book.setAttribute('data-id', this.id);
     library.appendChild(book);
 
     var image = document.createElement('img');
-    var link = "img/" + img;
+    var link = 'img/' + img;
     image.className = 'book__img';
-    image.setAttribute("src", link);
+    image.setAttribute('src', link);
     book.appendChild(image);
 
 	var name = document.createElement('div');
@@ -37,10 +38,12 @@ function Book(img, title, author, year, rating, price){
     rate.className = 'book__rate';
     book.appendChild(rate);
 
+    //book rating
     for (var i = 0; i < 5; i++) {
 		var star = document.createElement('div');
         star.className = 'book__star';
-        star.classList.add('s' + book.id);
+        star.classList.add('s' + this.id);
+        star.setAttribute('data-rate', i+1);
         rate.appendChild(star);
         //current rating
 		if (i + 1 <= rating){
@@ -49,33 +52,39 @@ function Book(img, title, author, year, rating, price){
     };
 
 //user rating
-    var rateStar = document.querySelectorAll('.book__star.s' + book.id);
-    
-    rate.addEventListener('click', function(e){
+    var rateStar = document.querySelectorAll('.book__star.s' + this.id);
+
+    rate.addEventListener('click', function(e) {
         var target = e.target;
-        if(target.classList.contains('book__star')){
+        if(target.classList.contains('book__star')) {
             removeClass(rateStar, 'book__star--current');
             target.classList.add('book__star--active', 'book__star--current');
         }
+        //rating update
+        if(target.dataset.rate >= 3) {
+            rating += 0.1;
+        } else {
+            rating -= 0.1;
+        }
     });
 
-    rate.addEventListener('mouseover', function(e){
+    rate.addEventListener('mouseover', function(e) {
         var target = e.target;
-        if(target.classList.contains('book__star')){
+        if(target.classList.contains('book__star')) {
             removeClass(rateStar, 'book__star--active');
             target.classList.add('book__star--active');
             mouseOverActive(rateStar);
         }
     });
 
-    rate.addEventListener('mouseout', function(){
+    rate.addEventListener('mouseout', function() {
         addClass(rateStar, 'book__star--active');
         mouseOutActive(rateStar);
     });
 
-    function removeClass(arr){
+    function removeClass(arr) {
         for(var i = 0; i < arr.length; i++) {
-            for(var j = 1; j < arguments.length; j++){
+            for(var j = 1; j < arguments.length; j++) {
                 rateStar[i].classList.remove(arguments[j]);
             }
         }
@@ -83,43 +92,43 @@ function Book(img, title, author, year, rating, price){
 
     function addClass(arr) {
         for(var i = 0; i < arr.length; i++) {
-            for(var j = 1; j < arguments.length; j++){
+            for(var j = 1; j < arguments.length; j++) {
                 rateStar[i].classList.add(arguments[j]);
             }
         }
     };
 
-    function mouseOverActive(arr){
-        for(var i = 0; i < arr.length; i++){
-            if(arr[i].classList.contains('book__star--active')){
+    function mouseOverActive(arr) {
+        for(var i = 0; i < arr.length; i++) {
+            if(arr[i].classList.contains('book__star--active')) {
                 break;
-            }else{
+            } else {
                 arr[i].classList.add('book__star--active');
             }
         }
     };
 
-    function mouseOutActive(arr){
-        for(var i = arr.length-1; i >= 0; i--){
-            if(arr[i].classList.contains('book__star--current')){
+    function mouseOutActive(arr) {
+        for(var i = arr.length-1; i >= 0; i--) {
+            if(arr[i].classList.contains('book__star--current')) {
                 break;
             } else {
                 arr[i].classList.remove('book__star--active');
             }
         }
-    }
+    };
 };
 
 //adding books to the library
-var allBooks = [new Book('book01.png', 'Jewels of Nizam', 'Geeta Devi', 2017, 3, 150),
-                new Book('book02.png', 'Cakes & Bakes', 'Sanjeev Kapoor', 2001, 4, 99),
-                new Book('book03.png', 'Jamies Kitchen', 'Jamie Oliver', 2010, 2, 70),
+var allBooks = [new Book('book01.png', 'Jewels of Nizam', 'Geeta Devi', 2017, 3.5, 150),
+                new Book('book02.png', 'Cakes & Bakes', 'Sanjeev Kapoor', 2001, 4.1, 99),
+                new Book('book03.png', 'Jamies Kitchen', 'Jamie Oliver', 2010, 2.3, 70),
                 new Book('book04.png', 'Inexpensive Family Meals', 'Simon Holst', 2005, 2, 0),
                 new Book('book05.png', 'Paleo Slow Cooking', 'Chrissy Gower', 2018, 1, 20),
-                new Book('book06.png', 'Cook Like an Italian', 'Tobie Puttock', 2007, 4, 40),
+                new Book('book06.png', 'Cook Like an Italian', 'Tobie Puttock', 2007, 4.2, 40),
                 new Book('book07.png', 'Indian Cooking', 'Geeta Devi', 2012, 5, 0),
-                new Book('book08.png', 'Jamie Does', 'Jamie Oliver', 2014, 3, 30),
-                new Book('book09.png', 'Jamies italy', 'Jamie Oliver', 2016, 4, 0),
+                new Book('book08.png', 'Jamie Does', 'Jamie Oliver', 2014, 3.2, 30),
+                new Book('book09.png', 'Jamies italy', 'Jamie Oliver', 2016, 4.2, 0),
                 new Book('book10.png', 'Vegetables Cookbook', 'Matthew Biggs', 2009, 5, 50)];
 
 //adding a new book
@@ -127,9 +136,6 @@ var addButton = document.getElementsByClassName('add__btn')[0];
 addButton.addEventListener('click', bookAdd);
 
 function bookAdd() {
-    var formBg = document.createElement('div');
-    formBg.className = 'form-bg';
-    document.body.appendChild(formBg);
 
 	var formWrapper = document.createElement('div');
     formWrapper.className = 'form-wrapper';
@@ -150,7 +156,8 @@ function bookAdd() {
 
 	var imgInput = document.createElement('input');
 	imgInput.setAttribute('type', 'text');
-	imgInput.setAttribute('required', '');
+    imgInput.setAttribute('required', '');
+    imgInput.setAttribute('placeholder', 'Book cover from img/');
     form.appendChild(imgInput);
 
 	var bookTitle = document.createElement('div');
@@ -205,29 +212,139 @@ function bookAdd() {
 	var submit = document.createElement('input');
 	submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'Add Book');
-    form.appendChild(submit);	
+    form.appendChild(submit);
 
-	formBg.addEventListener('click', function (){
-		document.body.removeChild(formBg);
-		document.body.removeChild(formWrapper);
-    });
-
-    closeBtn.addEventListener('click', function (){
-		document.body.removeChild(formBg);
+    closeBtn.addEventListener('click', function() {
 		document.body.removeChild(formWrapper);
 	});
 
-	form.addEventListener('submit', 
-		function(){
-			allBooks.push(
-				new Book(imgInput.value, 
-					titleInput.value, 
-                    authorInput.value,
-                    yearInput.value,
-					rateInput.value,   
-                    priceInput.value)
-            );
-            document.body.removeChild(formBg);
-			document.body.removeChild(formWrapper);
-        });
+	form.addEventListener('submit', function() {
+        allBooks.push(
+            new Book(imgInput.value, 
+                titleInput.value, 
+                authorInput.value,
+                yearInput.value,
+                rateInput.value,   
+                priceInput.value)
+        );
+
+        //adding a new book to actions
+        var actions = document.querySelector('.sidebar-actions');		
+        var newAction = document.createElement('li');
+        newAction.className = 'sidebar-actions__item';
+        
+        actions.insertBefore(newAction, actions.firstChild);
+
+        newAction.insertAdjacentHTML('afterBegin', 'You added <span class="sidebar-actions__item--bright">' +
+            titleInput.value + 
+            '</span> by <span class="sidebar-actions__item--bright">' +
+            authorInput.value + 
+            '</span> to your <span class="sidebar-actions__item--bright"> Must Read Titles.</span><p class="sidebar-actions__time">1 minute ago</p>'
+        );
+        
+        document.body.removeChild(formWrapper);
+    });
 }
+
+//book filter
+var filterLibrary = document.querySelector('.library');
+var filterItem = document.querySelectorAll('.filter__item');
+var filterBooks = document.querySelectorAll('.book');
+
+for (i = 0; i < 4; i++) {
+	filterItem[i].addEventListener('click', function(e) {
+        target = e.target;
+        for (j = 0; j < 4; j++) {
+            if (filterItem[j] == target) {
+                filterItem[j].classList.add('filter__item--active');
+            } else {
+            filterItem[j].classList.remove('filter__item--active');
+            }
+        }
+        if (target == filterItem[0]) {
+            fillLibrary();
+        }
+        if (target == filterItem[1]) {
+            fillLibrary();
+            clearLibrary();
+            for (i = 0; i < allBooks.length; i++) {
+                if(allBooks[i].year >= 2012) {
+                    for (j = 0; j < filterBooks.length; j++){
+                        if(filterBooks[j].dataset.id == allBooks[i].id) {
+                            filterLibrary.appendChild(filterBooks[j]);
+                        }
+                    }
+                }
+            }
+        }
+        if (target == filterItem[2]) {
+            fillLibrary();
+            clearLibrary();
+            for (i = 0; i < allBooks.length; i++) {
+                if(allBooks[i].rating >= 4) {
+                    for (j = 0; j < filterBooks.length; j++){
+                        if(filterBooks[j].dataset.id == allBooks[i].id) {
+                            filterLibrary.appendChild(filterBooks[j]);
+                        }
+                    }
+                }
+            }
+        }
+        if (target == filterItem[3]) {
+            fillLibrary();
+            clearLibrary();
+            for (i = 0; i < allBooks.length; i++) {
+                if(allBooks[i].price == 0){
+                    for (j = 0; j < filterBooks.length; j++){
+                        if(filterBooks[j].dataset.id == allBooks[i].id) {
+                            filterLibrary.appendChild(filterBooks[j]);
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function fillLibrary() {
+	for (i = 0; i < filterBooks.length; i++) {
+			filterLibrary.appendChild(filterBooks[i]);
+	}
+}
+
+function clearLibrary() {
+	for (i = 0; i < filterBooks.length; i++) {
+		filterLibrary.removeChild(filterBooks[i]);
+	}
+}
+
+//book search
+var bookSearch = document.querySelector('.filter-search');
+
+bookSearch.addEventListener('input', function() {
+	var searchBooks = document.querySelectorAll('.book');
+	var searchLibrary = document.querySelector('.library');	
+	var booksArr = allBooks.slice();
+	
+	for (i = 0; i < bookSearch.value.length; i++) {
+		for (j = 0; j < booksArr.length; j++) {
+			if (booksArr[j] !== undefined && booksArr[j].title[i].toLowerCase() !== bookSearch.value[i].toLowerCase()) {
+				delete booksArr[j];
+			}
+		}
+    }
+    
+	for (i = 0; i < searchBooks.length; i++) {
+        searchLibrary.removeChild(searchBooks[i]);
+    }
+    
+	for (i = 0; i < booksArr.length; i++) {
+		if (booksArr[i] !== undefined) {
+			for (j = 0; j < searchBooks.length; j++) {
+				if (searchBooks[j].dataset.id == booksArr[i].id) {
+                    searchLibrary.appendChild(searchBooks[j]);
+                }
+            }
+		}
+	}
+});
