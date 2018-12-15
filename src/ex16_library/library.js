@@ -1,37 +1,41 @@
-var id = 1;
+var allBooks =[];
 
-//library constructor
-function Book(img, title, author, year, rating, price) {
-	this.img = img;
-	this.title = title;
-    this.author = author;
-    this.year = year;
-	this.rating = rating;
-	this.price = price;
-	this.id = id;
-	id++;
-    
-    var library = document.getElementsByClassName('library')[0];
+function load() {
+    var request = new XMLHttpRequest();
+    request.open("GET", "https://rsu-library-api.herokuapp.com/books", true);
+    request.send();
+    request.onload = function() {    
+          try {
+            allBooks = JSON.parse(request.responseText);
+          } catch(e) {
+            alert( "При загрузке произошла ошибка " + e.message );
+          }
+          showBooks();
+      }
+}
+
+document.addEventListener("DOMContentLoaded", load);
+
+function createBook(a){
 
     var book = document.createElement('div');
     book.className = 'book';
-    book.setAttribute('data-id', this.id);
-    library.appendChild(book);
+    book.id = a.id;
 
     var image = document.createElement('img');
-    var link = 'img/' + img;
+    var link = a.image_url;
     image.className = 'book__img';
     image.setAttribute('src', link);
     book.appendChild(image);
 
 	var name = document.createElement('div');
 	name.className = 'book__name';
-    name.innerHTML = title;
+    name.innerHTML = a.title;
     book.appendChild(name);
 
 	var by = document.createElement('div');
 	by.className = 'book__author';
-    by.innerHTML = 'by ' + author;
+    by.innerHTML = 'by ' + a.author.firstName + ' ' + a.author.lastName;
     book.appendChild(by);
 
     var rate = document.createElement('div');
@@ -42,18 +46,18 @@ function Book(img, title, author, year, rating, price) {
     for (var i = 0; i < 5; i++) {
 		var star = document.createElement('div');
         star.className = 'book__star';
-        star.classList.add('s' + this.id);
+        star.classList.add('s' + a.id);
         star.setAttribute('data-rate', i+1);
         rate.appendChild(star);
         //current rating
-		if (i + 1 <= rating){
+		if (i + 1 <= a.rating){
 			star.classList.add('book__star--active', 'book__star--current');
 		}
     };
 
-//user rating
-    var rateStar = document.querySelectorAll('.book__star.s' + this.id);
-
+    //user rating
+    var rateStar = document.getElementsByClassName('s' + a.id);
+    
     rate.addEventListener('click', function(e) {
         var target = e.target;
         if(target.classList.contains('book__star')) {
@@ -61,10 +65,11 @@ function Book(img, title, author, year, rating, price) {
             target.classList.add('book__star--active', 'book__star--current');
         }
         //rating update
-        if(target.dataset.rate >= 3) {
-            rating += 0.1;
-        } else {
-            rating -= 0.1;
+        if(target.dataset.rate >= 3 && a.rating < 5) {
+            a.rating += 0.1;
+        } 
+        if(target.dataset.rate < 3 && a.rating > 0) {
+           a.rating -= 0.1;
         }
     });
 
@@ -117,19 +122,20 @@ function Book(img, title, author, year, rating, price) {
             }
         }
     };
-};
 
-//adding books to the library
-var allBooks = [new Book('book01.png', 'Jewels of Nizam', 'Geeta Devi', 2017, 3.5, 150),
-                new Book('book02.png', 'Cakes & Bakes', 'Sanjeev Kapoor', 2001, 4.1, 99),
-                new Book('book03.png', 'Jamies Kitchen', 'Jamie Oliver', 2010, 2.3, 70),
-                new Book('book04.png', 'Inexpensive Family Meals', 'Simon Holst', 2005, 2, 0),
-                new Book('book05.png', 'Paleo Slow Cooking', 'Chrissy Gower', 2018, 1, 20),
-                new Book('book06.png', 'Cook Like an Italian', 'Tobie Puttock', 2007, 4.2, 40),
-                new Book('book07.png', 'Indian Cooking', 'Geeta Devi', 2012, 5, 0),
-                new Book('book08.png', 'Jamie Does', 'Jamie Oliver', 2014, 3.2, 30),
-                new Book('book09.png', 'Jamies italy', 'Jamie Oliver', 2016, 4.2, 0),
-                new Book('book10.png', 'Vegetables Cookbook', 'Matthew Biggs', 2009, 5, 50)];
+return book;
+}
+
+function showBooks() {
+
+    var library = document.querySelector('.library');
+    library.innerHTML = '';
+
+    allBooks.forEach(function(a){
+        var book = createBook(a);
+        library.appendChild(book);
+    });
+}
 
 //adding a new book
 var addButton = document.getElementsByClassName('add__btn')[0];
@@ -150,14 +156,12 @@ function bookAdd() {
     form.setAttribute('action', '#');
     formWrapper.appendChild(form);
 
-	var bookImg = document.createElement('div');
-	bookImg.innerHTML = 'Book cover: ';
+    var bookImg = document.createElement('div');
+	bookImg.innerHTML = 'Book cover (URL): ';
 	form.appendChild(bookImg);
 
 	var imgInput = document.createElement('input');
 	imgInput.setAttribute('type', 'text');
-    imgInput.setAttribute('required', '');
-    imgInput.setAttribute('placeholder', 'Book cover from img/');
     form.appendChild(imgInput);
 
 	var bookTitle = document.createElement('div');
@@ -177,17 +181,6 @@ function bookAdd() {
 	authorInput.setAttribute('type', 'text');
 	authorInput.setAttribute('required', '');
     form.appendChild(authorInput);
-
-    var bookYear = document.createElement('div');
-	bookYear.innerHTML = 'Year: ';
-	form.appendChild(bookYear);	
-
-	var yearInput = document.createElement('input');
-    yearInput.setAttribute('type', 'number');
-    yearInput.setAttribute('min', '0');
-    yearInput.setAttribute('max', '2018');
-	yearInput.setAttribute('required', '');
-    form.appendChild(yearInput);
 
 	var bookRate = document.createElement('div');
 	bookRate.innerHTML = 'Rate: ';
@@ -219,14 +212,19 @@ function bookAdd() {
 	});
 
 	form.addEventListener('submit', function() {
-        allBooks.push(
-            new Book(imgInput.value, 
-                titleInput.value, 
-                authorInput.value,
-                yearInput.value,
-                rateInput.value,   
-                priceInput.value)
-        );
+        var book = { 
+            title: titleInput.value, 
+            author: {
+                firstName: authorInput.value.split(' ')[0] || '',
+                lastName: authorInput.value.split(' ')[1] || ''
+            },
+            createdAt: new Date().getTime(),
+            image_url: imgInput.value || "https://rsu-library-api.herokuapp.com/static/images/nocover.jpg",
+            rating: rateInput.value,   
+            cost: priceInput.value
+        }
+        allBooks.push(book);
+        showBooks();
 
         //adding a new book to actions
         var actions = document.querySelector('.sidebar-actions');		
@@ -243,108 +241,95 @@ function bookAdd() {
         );
         
         document.body.removeChild(formWrapper);
-    });
+        }
+    );
 }
 
-//book filter
-var filterLibrary = document.querySelector('.library');
-var filterItem = document.querySelectorAll('.filter__item');
-var filterBooks = document.querySelectorAll('.book');
+//books filter
+var filter = document.querySelector(".filter");
 
-for (i = 0; i < 4; i++) {
-	filterItem[i].addEventListener('click', function(e) {
-        target = e.target;
-        for (j = 0; j < 4; j++) {
-            if (filterItem[j] == target) {
-                filterItem[j].classList.add('filter__item--active');
-            } else {
-            filterItem[j].classList.remove('filter__item--active');
-            }
+filter.addEventListener('click', function(e){
+    var target = e.target;
+    var filterLibrary = document.querySelector('.library');
+    var filterItem = document.querySelectorAll('.filter__item');
+    filterLibrary.innerHTML = '';
+    
+    //setting active class
+    for (var i = 0; i < 4; i++) {
+        if (filterItem[i] === target) {
+            filterItem[i].classList.add('filter__item--active');
+        } else {
+        filterItem[i].classList.remove('filter__item--active');
         }
-        if (target == filterItem[0]) {
-            fillLibrary();
-        }
-        if (target == filterItem[1]) {
-            fillLibrary();
-            clearLibrary();
-            for (i = 0; i < allBooks.length; i++) {
-                if(allBooks[i].year >= 2012) {
-                    for (j = 0; j < filterBooks.length; j++){
-                        if(filterBooks[j].dataset.id == allBooks[i].id) {
-                            filterLibrary.appendChild(filterBooks[j]);
-                        }
-                    }
-                }
-            }
-        }
-        if (target == filterItem[2]) {
-            fillLibrary();
-            clearLibrary();
-            for (i = 0; i < allBooks.length; i++) {
-                if(allBooks[i].rating >= 4) {
-                    for (j = 0; j < filterBooks.length; j++){
-                        if(filterBooks[j].dataset.id == allBooks[i].id) {
-                            filterLibrary.appendChild(filterBooks[j]);
-                        }
-                    }
-                }
-            }
-        }
-        if (target == filterItem[3]) {
-            fillLibrary();
-            clearLibrary();
-            for (i = 0; i < allBooks.length; i++) {
-                if(allBooks[i].price == 0){
-                    for (j = 0; j < filterBooks.length; j++){
-                        if(filterBooks[j].dataset.id == allBooks[i].id) {
-                            filterLibrary.appendChild(filterBooks[j]);
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
+    }
+    
+    //book filtering
+    if(target === filterItem[0]){
+        showBooks();
+    }
 
-function fillLibrary() {
-	for (i = 0; i < filterBooks.length; i++) {
-			filterLibrary.appendChild(filterBooks[i]);
-	}
-}
+    if(target === filterItem[1]){
+        var recent = allBooks.map(function(item){
+            return item;
+        });
+        recent.sort(function(a, b){
+            if(a.createdAt < b.createdAt){
+                return 1;
+            }
+            return -1;
+        });
 
-function clearLibrary() {
-	for (i = 0; i < filterBooks.length; i++) {
-		filterLibrary.removeChild(filterBooks[i]);
-	}
-}
+        recent.forEach(function(item){
+            var recentBooks = createBook(item);
+            filterLibrary.appendChild(recentBooks);
+        });
+    }
+
+    if(target === filterItem[2]){
+        var popular = allBooks.map(function(item){
+            return item;
+        });
+        popular.sort(function(a, b){
+            if(a.rating < b.rating){
+                return 1;
+            }
+            return -1;
+        });
+    
+        popular.forEach(function(item){
+            var popularBooks = createBook(item);
+            filterLibrary.appendChild(popularBooks);
+        });
+    }
+
+    if(target === filterItem[3]){
+        var free = allBooks.filter(function(item){
+            return item.cost == 0
+        });
+    
+        free.forEach(function(item){
+            var freeBooks = createBook(item);
+            filterLibrary.appendChild(freeBooks);
+        });
+    }
+});
 
 //book search
-var bookSearch = document.querySelector('.filter-search');
+var bookSearch = document.querySelector(".filter-search");
+bookSearch.addEventListener('input', function(e) {
 
-bookSearch.addEventListener('input', function() {
-	var searchBooks = document.querySelectorAll('.book');
-	var searchLibrary = document.querySelector('.library');	
-	var booksArr = allBooks.slice();
-	
-	for (i = 0; i < bookSearch.value.length; i++) {
-		for (j = 0; j < booksArr.length; j++) {
-			if (booksArr[j] !== undefined && booksArr[j].title[i].toLowerCase() !== bookSearch.value[i].toLowerCase()) {
-				delete booksArr[j];
-			}
-		}
-    }
-    
-	for (i = 0; i < searchBooks.length; i++) {
-        searchLibrary.removeChild(searchBooks[i]);
-    }
-    
-	for (i = 0; i < booksArr.length; i++) {
-		if (booksArr[i] !== undefined) {
-			for (j = 0; j < searchBooks.length; j++) {
-				if (searchBooks[j].dataset.id == booksArr[i].id) {
-                    searchLibrary.appendChild(searchBooks[j]);
-                }
-            }
-		}
-	}
+    var library = document.querySelector('.library');
+    var value = e.target.value.toLowerCase();
+    var foundBooks = allBooks.filter(function(item){
+        if(item.title.toLowerCase().indexOf(value) !== -1){
+            return item;
+        }
+    });
+
+    library.innerHTML = '';
+
+    foundBooks.forEach(function(item){
+        var book = createBook(item);
+        library.appendChild(book);
+    });
 });
