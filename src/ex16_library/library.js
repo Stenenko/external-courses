@@ -1,4 +1,4 @@
-var allBooks =[];
+var allBooks;
 
 function load() {
     var request = new XMLHttpRequest();
@@ -52,18 +52,24 @@ function createBook(a){
         //current rating
 		if (i + 1 <= a.rating){
 			star.classList.add('book__star--active', 'book__star--current');
-		}
+        }
     };
 
     //user rating
-    var rateStar = document.getElementsByClassName('s' + a.id);
     
-    rate.addEventListener('click', function(e) {
+    var rateStar = document.getElementsByClassName('s' + a.id);
+
+    rate.addEventListener('click', rateClick);
+
+    rate.addEventListener('mouseover', rateMouseOver);
+     
+    rate.addEventListener('mouseout', rateMouseOut);
+    
+    function rateClick(e) {
         var target = e.target;
-        if(target.classList.contains('book__star')) {
             removeClass(rateStar, 'book__star--current');
             target.classList.add('book__star--active', 'book__star--current');
-        }
+
         //rating update
         if(target.dataset.rate >= 3 && a.rating < 5) {
             a.rating += 0.1;
@@ -71,65 +77,67 @@ function createBook(a){
         if(target.dataset.rate < 3 && a.rating > 0) {
            a.rating -= 0.1;
         }
-    });
-
-    rate.addEventListener('mouseover', function(e) {
+    }
+    
+    function rateMouseOver(e) {
         var target = e.target;
-        if(target.classList.contains('book__star')) {
-            removeClass(rateStar, 'book__star--active');
-            target.classList.add('book__star--active');
-            mouseOverActive(rateStar);
-        }
-    });
-
-    rate.addEventListener('mouseout', function() {
+        removeClass(rateStar, 'book__star--active');
+        target.classList.add('book__star--active');
+        mouseOverActive(rateStar);
+    }
+    
+    function rateMouseOut() {
         addClass(rateStar, 'book__star--active');
         mouseOutActive(rateStar);
-    });
-
-    function removeClass(arr) {
-        for(var i = 0; i < arr.length; i++) {
-            for(var j = 1; j < arguments.length; j++) {
-                rateStar[i].classList.remove(arguments[j]);
-            }
-        }
-    };
-
-    function addClass(arr) {
-        for(var i = 0; i < arr.length; i++) {
-            for(var j = 1; j < arguments.length; j++) {
-                rateStar[i].classList.add(arguments[j]);
-            }
-        }
-    };
-
-    function mouseOverActive(arr) {
-        for(var i = 0; i < arr.length; i++) {
-            if(arr[i].classList.contains('book__star--active')) {
-                break;
-            } else {
-                arr[i].classList.add('book__star--active');
-            }
-        }
-    };
-
-    function mouseOutActive(arr) {
-        for(var i = arr.length-1; i >= 0; i--) {
-            if(arr[i].classList.contains('book__star--current')) {
-                break;
-            } else {
-                arr[i].classList.remove('book__star--active');
-            }
-        }
-    };
+    }
 
 return book;
 }
 
-function showBooks() {
+function removeClass(arr) {
+    for(var i = 0; i < arr.length; i++) {
+        for(var j = 1; j < arguments.length; j++) {
+            arr[i].classList.remove(arguments[j]);
+        }
+    }
+}
 
-    var library = document.querySelector('.library');
+function addClass(arr) {
+    for(var i = 0; i < arr.length; i++) {
+        for(var j = 1; j < arguments.length; j++) {
+            arr[i].classList.add(arguments[j]);
+        }
+    }
+}
+
+function mouseOverActive(arr) {
+    for(var i = 0; i < arr.length; i++) {
+        if(arr[i].classList.contains('book__star--active')) {
+            break;
+        } else {
+            arr[i].classList.add('book__star--active');
+        }
+    }
+}
+
+function mouseOutActive(arr) {
+    for(var i = arr.length-1; i >= 0; i--) {
+        if(arr[i].classList.contains('book__star--current')) {
+            break;
+        } else {
+            arr[i].classList.remove('book__star--active');
+        }
+    }
+}
+
+var library = document.querySelector('.library');
+
+function clearLibrary(){
     library.innerHTML = '';
+}
+
+function showBooks() {
+    clearLibrary();
 
     allBooks.forEach(function(a){
         var book = createBook(a);
@@ -161,7 +169,7 @@ function bookAdd() {
 	form.appendChild(bookImg);
 
 	var imgInput = document.createElement('input');
-	imgInput.setAttribute('type', 'text');
+	imgInput.setAttribute('type', 'url');
     form.appendChild(imgInput);
 
 	var bookTitle = document.createElement('div');
@@ -211,7 +219,9 @@ function bookAdd() {
 		document.body.removeChild(formWrapper);
 	});
 
-	form.addEventListener('submit', function() {
+    form.addEventListener('submit', pushBook);
+    
+    function pushBook() {
         var book = { 
             title: titleInput.value, 
             author: {
@@ -241,18 +251,18 @@ function bookAdd() {
         );
         
         document.body.removeChild(formWrapper);
-        }
-    );
+    }
 }
 
 //books filter
 var filter = document.querySelector(".filter");
 
-filter.addEventListener('click', function(e){
+filter.addEventListener('click', bookFilter);
+
+function bookFilter(e){
     var target = e.target;
-    var filterLibrary = document.querySelector('.library');
     var filterItem = document.querySelectorAll('.filter__item');
-    filterLibrary.innerHTML = '';
+    clearLibrary();
     
     //setting active class
     for (var i = 0; i < 4; i++) {
@@ -262,63 +272,60 @@ filter.addEventListener('click', function(e){
         filterItem[i].classList.remove('filter__item--active');
         }
     }
-    
+
     //book filtering
-    if(target === filterItem[0]){
-        showBooks();
-    }
+    switch(target) {
+        case filterItem[0]:
+            showBooks();
+            break;
 
-    if(target === filterItem[1]){
-        var recent = allBooks.map(function(item){
-            return item;
-        });
-        recent.sort(function(a, b){
-            if(a.createdAt < b.createdAt){
-                return 1;
-            }
-            return -1;
-        });
+        case filterItem[1]:
+            var recent = allBooks.map(function(item){
+                return item;
+            });
+            recent.sort(function(a, b){
+                if(a.createdAt < b.createdAt){
+                    return 1;
+                }
+                return -1;
+            });
+            recent.forEach(function(item){
+                var recentBooks = createBook(item);
+                library.appendChild(recentBooks);
+            });
+            break;
 
-        recent.forEach(function(item){
-            var recentBooks = createBook(item);
-            filterLibrary.appendChild(recentBooks);
-        });
-    }
+        case filterItem[2]:
+            var popular = allBooks.map(function(item){
+                return item;
+            });
+            popular.sort(function(a, b){
+                if(a.rating < b.rating){
+                    return 1;
+                }
+                return -1;
+            });
+            popular.forEach(function(item){
+                var popularBooks = createBook(item);
+                library.appendChild(popularBooks);
+            });
+            break;
 
-    if(target === filterItem[2]){
-        var popular = allBooks.map(function(item){
-            return item;
-        });
-        popular.sort(function(a, b){
-            if(a.rating < b.rating){
-                return 1;
-            }
-            return -1;
-        });
-    
-        popular.forEach(function(item){
-            var popularBooks = createBook(item);
-            filterLibrary.appendChild(popularBooks);
-        });
+        case filterItem[3]:
+            var free = allBooks.filter(function(item){
+                return item.cost == 0
+            });
+            free.forEach(function(item){
+                var freeBooks = createBook(item);
+                library.appendChild(freeBooks);
+            });
     }
-
-    if(target === filterItem[3]){
-        var free = allBooks.filter(function(item){
-            return item.cost == 0
-        });
-    
-        free.forEach(function(item){
-            var freeBooks = createBook(item);
-            filterLibrary.appendChild(freeBooks);
-        });
-    }
-});
+}
 
 //book search
 var bookSearch = document.querySelector(".filter-search");
-bookSearch.addEventListener('input', function(e) {
 
-    var library = document.querySelector('.library');
+bookSearch.addEventListener('input', function(e) {
     var value = e.target.value.toLowerCase();
     var foundBooks = allBooks.filter(function(item){
         if(item.title.toLowerCase().indexOf(value) !== -1){
@@ -326,7 +333,7 @@ bookSearch.addEventListener('input', function(e) {
         }
     });
 
-    library.innerHTML = '';
+    clearLibrary();
 
     foundBooks.forEach(function(item){
         var book = createBook(item);
