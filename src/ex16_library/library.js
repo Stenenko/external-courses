@@ -5,13 +5,13 @@ function load() {
     request.open("GET", "https://rsu-library-api.herokuapp.com/books", true);
     request.send();
     request.onload = function() {    
-          try {
+        try {
             allBooks = JSON.parse(request.responseText);
-          } catch(e) {
+        } catch(e) {
             alert( "При загрузке произошла ошибка " + e.message );
-          }
-          showBooks();
-      }
+        }
+        showBooks(allBooks);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", load);
@@ -28,13 +28,13 @@ function createBook(a){
     image.setAttribute('src', link);
     book.appendChild(image);
 
-	var name = document.createElement('div');
-	name.className = 'book__name';
+    var name = document.createElement('div');
+    name.className = 'book__name';
     name.innerHTML = a.title;
     book.appendChild(name);
 
-	var by = document.createElement('div');
-	by.className = 'book__author';
+    var by = document.createElement('div');
+    by.className = 'book__author';
     by.innerHTML = 'by ' + a.author.firstName + ' ' + a.author.lastName;
     book.appendChild(by);
 
@@ -44,54 +44,54 @@ function createBook(a){
 
     //book rating
     for (var i = 0; i < 5; i++) {
-		var star = document.createElement('div');
+        var star = document.createElement('div');
         star.className = 'book__star';
         star.classList.add('s' + a.id);
         star.setAttribute('data-rate', i+1);
         rate.appendChild(star);
         //current rating
-		if (i + 1 <= a.rating){
-			star.classList.add('book__star--active', 'book__star--current');
+        if (i + 1 <= a.rating){
+            star.classList.add('book__star--active', 'book__star--current');
         }
     };
 
     //user rating
-    
+
     var rateStar = document.getElementsByClassName('s' + a.id);
 
     rate.addEventListener('click', rateClick);
 
     rate.addEventListener('mouseover', rateMouseOver);
-     
+
     rate.addEventListener('mouseout', rateMouseOut);
-    
+
     function rateClick(e) {
         var target = e.target;
-            removeClass(rateStar, 'book__star--current');
-            target.classList.add('book__star--active', 'book__star--current');
+        removeClass(rateStar, 'book__star--current');
+        target.classList.add('book__star--active', 'book__star--current');
 
         //rating update
         if(target.dataset.rate >= 3 && a.rating < 5) {
             a.rating += 0.1;
         } 
         if(target.dataset.rate < 3 && a.rating > 0) {
-           a.rating -= 0.1;
+            a.rating -= 0.1;
         }
     }
-    
+
     function rateMouseOver(e) {
         var target = e.target;
         removeClass(rateStar, 'book__star--active');
         target.classList.add('book__star--active');
         mouseOverActive(rateStar);
     }
-    
+
     function rateMouseOut() {
         addClass(rateStar, 'book__star--active');
         mouseOutActive(rateStar);
     }
 
-return book;
+    return book;
 }
 
 function removeClass(arr) {
@@ -130,18 +130,13 @@ function mouseOutActive(arr) {
     }
 }
 
-var library = document.querySelector('.library');
-
-function clearLibrary(){
+function showBooks(arr) {
+    var library = document.querySelector('.library');
     library.innerHTML = '';
-}
 
-function showBooks() {
-    clearLibrary();
-
-    allBooks.forEach(function(a){
-        var book = createBook(a);
-        library.appendChild(book);
+    arr.forEach(function(a){
+    var book = createBook(a);
+    library.appendChild(book);
     });
 }
 
@@ -151,82 +146,82 @@ addButton.addEventListener('click', bookAdd);
 
 function bookAdd() {
 
-	var formWrapper = document.createElement('div');
+    var formWrapper = document.createElement('div');
     formWrapper.className = 'form-wrapper';
     document.body.appendChild(formWrapper);
 
     var closeBtn = document.createElement('div');
     closeBtn.className = 'form-close';
     formWrapper.appendChild(closeBtn);
-    
-	var form = document.createElement('form');
-	form.id = 'book-add';
+
+    var form = document.createElement('form');
+    form.id = 'book-add';
     form.setAttribute('action', '#');
     formWrapper.appendChild(form);
 
     var bookImg = document.createElement('div');
-	bookImg.innerHTML = 'Book cover (URL): ';
-	form.appendChild(bookImg);
+    bookImg.innerHTML = 'Book cover (URL): ';
+    form.appendChild(bookImg);
 
-	var imgInput = document.createElement('input');
-	imgInput.setAttribute('type', 'url');
+    var imgInput = document.createElement('input');
+    imgInput.setAttribute('type', 'url');
     form.appendChild(imgInput);
 
-	var bookTitle = document.createElement('div');
-	bookTitle.innerHTML = 'Title: ';
-	form.appendChild(bookTitle);
+    var bookTitle = document.createElement('div');
+    bookTitle.innerHTML = 'Title: ';
+    form.appendChild(bookTitle);
 
-	var titleInput = document.createElement('input');
-	titleInput.setAttribute('type', 'text');
-	titleInput.setAttribute('required', '');
+    var titleInput = document.createElement('input');
+    titleInput.setAttribute('type', 'text');
+    titleInput.setAttribute('required', '');
     form.appendChild(titleInput);
 
-	var bookAuthor = document.createElement('div');
-	bookAuthor.innerHTML = 'Author: ';
-	form.appendChild(bookAuthor);
+    var bookAuthor = document.createElement('div');
+    bookAuthor.innerHTML = 'Author: ';
+    form.appendChild(bookAuthor);
 
-	var authorInput = document.createElement('input');
-	authorInput.setAttribute('type', 'text');
-	authorInput.setAttribute('required', '');
+    var authorInput = document.createElement('input');
+    authorInput.setAttribute('type', 'text');
+    authorInput.setAttribute('required', '');
     form.appendChild(authorInput);
 
-	var bookRate = document.createElement('div');
-	bookRate.innerHTML = 'Rate: ';
-	form.appendChild(bookRate);
+    var bookRate = document.createElement('div');
+    bookRate.innerHTML = 'Rate: ';
+    form.appendChild(bookRate);
 
-	var rateInput = document.createElement('input');
-	rateInput.setAttribute('type', 'number');
+    var rateInput = document.createElement('input');
+    rateInput.setAttribute('type', 'number');
     rateInput.setAttribute('min', '0');
     rateInput.setAttribute('max', '5');
     rateInput.setAttribute('required', '');
     form.appendChild(rateInput);
 
-	var bookPrice = document.createElement('div');
-	bookPrice.innerHTML = 'Price: ';
-	form.appendChild(bookPrice);	
+    var bookPrice = document.createElement('div');
+    bookPrice.innerHTML = 'Price: ';
+    form.appendChild(bookPrice);	
 
-	var priceInput = document.createElement('input');
-	priceInput.setAttribute('type', 'number');
-	priceInput.setAttribute('required', '');
+    var priceInput = document.createElement('input');
+    priceInput.setAttribute('type', 'number');
+    priceInput.setAttribute('required', '');
     form.appendChild(priceInput);
 
-	var submit = document.createElement('input');
-	submit.setAttribute('type', 'submit');
+    var submit = document.createElement('input');
+    submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'Add Book');
     form.appendChild(submit);
 
     closeBtn.addEventListener('click', function() {
-		document.body.removeChild(formWrapper);
-	});
+        document.body.removeChild(formWrapper);
+    });
 
     form.addEventListener('submit', pushBook);
-    
+
     function pushBook() {
         var book = { 
             title: titleInput.value, 
             author: {
-                firstName: authorInput.value.split(' ')[0] || '',
-                lastName: authorInput.value.split(' ')[1] || ''
+            firstName: authorInput.value.split(' ')[0] || '',
+            lastName: authorInput.value.split(' ')[1] || ''
             },
             createdAt: new Date().getTime(),
             image_url: imgInput.value || "https://rsu-library-api.herokuapp.com/static/images/nocover.jpg",
@@ -234,22 +229,22 @@ function bookAdd() {
             cost: priceInput.value
         }
         allBooks.push(book);
-        showBooks();
+        showBooks(allBooks);
 
         //adding a new book to actions
         var actions = document.querySelector('.sidebar-actions');		
         var newAction = document.createElement('li');
         newAction.className = 'sidebar-actions__item';
-        
+
         actions.insertBefore(newAction, actions.firstChild);
 
         newAction.insertAdjacentHTML('afterBegin', 'You added <span class="sidebar-actions__item--bright">' +
-            titleInput.value + 
-            '</span> by <span class="sidebar-actions__item--bright">' +
-            authorInput.value + 
-            '</span> to your <span class="sidebar-actions__item--bright"> Must Read Titles.</span><p class="sidebar-actions__time">1 minute ago</p>'
+        titleInput.value + 
+        '</span> by <span class="sidebar-actions__item--bright">' +
+        authorInput.value + 
+        '</span> to your <span class="sidebar-actions__item--bright"> Must Read Titles.</span><p class="sidebar-actions__time">1 minute ago</p>'
         );
-        
+
         document.body.removeChild(formWrapper);
     }
 }
@@ -259,66 +254,52 @@ var filter = document.querySelector(".filter");
 
 filter.addEventListener('click', bookFilter);
 
-function bookFilter(e){
+function bookFilter(e) {
     var target = e.target;
     var filterItem = document.querySelectorAll('.filter__item');
-    clearLibrary();
-    
+
     //setting active class
     for (var i = 0; i < 4; i++) {
         if (filterItem[i] === target) {
             filterItem[i].classList.add('filter__item--active');
         } else {
-        filterItem[i].classList.remove('filter__item--active');
+            filterItem[i].classList.remove('filter__item--active');
         }
     }
 
     //book filtering
     switch(target) {
         case filterItem[0]:
-            showBooks();
+            showBooks(allBooks);
             break;
 
         case filterItem[1]:
-            var recent = allBooks.map(function(item){
-                return item;
-            });
+            var recent = allBooks.slice();
             recent.sort(function(a, b){
                 if(a.createdAt < b.createdAt){
-                    return 1;
-                }
+                return 1;
+            }
                 return -1;
             });
-            recent.forEach(function(item){
-                var recentBooks = createBook(item);
-                library.appendChild(recentBooks);
-            });
+            showBooks(recent);
             break;
 
         case filterItem[2]:
-            var popular = allBooks.map(function(item){
-                return item;
-            });
+            var popular = allBooks.slice();
             popular.sort(function(a, b){
                 if(a.rating < b.rating){
-                    return 1;
-                }
+                return 1;
+            }
                 return -1;
             });
-            popular.forEach(function(item){
-                var popularBooks = createBook(item);
-                library.appendChild(popularBooks);
-            });
+            showBooks(popular);
             break;
 
         case filterItem[3]:
             var free = allBooks.filter(function(item){
                 return item.cost == 0
             });
-            free.forEach(function(item){
-                var freeBooks = createBook(item);
-                library.appendChild(freeBooks);
-            });
+            showBooks(free);
     }
 }
 
@@ -327,16 +308,8 @@ var bookSearch = document.querySelector(".filter-search");
 
 bookSearch.addEventListener('input', function(e) {
     var value = e.target.value.toLowerCase();
-    var foundBooks = allBooks.filter(function(item){
-        if(item.title.toLowerCase().indexOf(value) !== -1){
-            return item;
-        }
+    var foundBooks = allBooks.filter(function(item){ 
+        return item.title.toLowerCase().indexOf(value) !== -1;
     });
-
-    clearLibrary();
-
-    foundBooks.forEach(function(item){
-        var book = createBook(item);
-        library.appendChild(book);
-    });
+    showBooks(foundBooks);
 });
